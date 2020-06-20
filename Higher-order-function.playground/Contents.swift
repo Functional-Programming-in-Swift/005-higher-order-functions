@@ -13,12 +13,27 @@ func logToWindow(_ msg: String) {
     print(msg + " From Windows")
 }
 
-func getValue(from number: Int, loggerType: (String)->()) -> String {
+enum Logger {
+    case Console, File, Windows
+    
+    func print () -> (String) -> () {
+        switch self {
+        case .Console:
+            return logToConsole
+        case .File:
+            return logToFile
+        case .Windows:
+            return logToWindow
+        }
+    }
+}
+
+func getValue(from number: Int, loggerType: Logger) -> String {
     
     let result = "something \(number)"
     
-    loggerType(result)
+    loggerType.print()(result)
     return result
 }
 
-getValue(from: 5, loggerType: logToWindow)
+getValue(from: 5, loggerType: .Windows)
